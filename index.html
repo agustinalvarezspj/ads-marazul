@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero Meta Ads · Mar Azul Suites</title>
+<style>
+  :root{
+    --pino:#1E3B32; --pino-claro:#2E5547; --mar:#2A6F8E;
+    --arena:#F6F3EC; --papel:#FFFFFF; --tinta:#22302B; --tinta-suave:#5C6B64;
+    --verde:#1D9E75; --ambar:#C98500; --rojo:#C4432B; --gris:#8B8A82; --linea:#E3DFD4;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--arena);color:var(--tinta);line-height:1.55;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px 60px}
+  button{font-family:inherit;cursor:pointer}
+
+  /* ---------- header ---------- */
+  header.top{background:var(--pino);color:#EDF3EF;padding:26px 0 62px}
+  header.top .wrap{padding-bottom:0;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+  .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#A8C4B4;margin-bottom:6px}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(24px,4vw,32px)}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .savedot{font-size:12px;color:#A8C4B4}
+  .savedot b{color:#EDF3EF}
+  .tbtn{background:transparent;border:1px solid #4A6B5E;color:#D5E3DB;padding:7px 12px;border-radius:8px;font-size:12.5px;transition:.12s}
+  .tbtn:hover{border-color:#A8C4B4;color:#fff}
+  .tbtn.solid{background:#EDF3EF;border-color:#EDF3EF;color:var(--pino);font-weight:600}
+  .tbtn.solid:hover{background:#fff}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:-44px;margin-bottom:24px}
+  .tab{background:var(--papel);border:1px solid var(--linea);border-radius:99px;padding:8px 16px;font-size:13.5px;font-weight:500;color:var(--tinta-suave);transition:.15s}
+  .tab:hover{border-color:var(--pino-claro);color:var(--tinta)}
+  .tab.activa{background:var(--pino);border-color:var(--pino);color:#EDF3EF;box-shadow:0 0 0 2px var(--arena)}
+  .tab.especial{border-style:dashed}
+  .tab.mes{background:transparent;border:none;padding:8px 2px 8px 6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#A8C4B4;cursor:default;font-weight:600}
+
+  /* ---------- kpis / cards ---------- */
+  .seccion{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);margin:18px 0 8px;font-weight:600}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+  .kpi{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:15px 17px}
+  .kpi .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave)}
+  .kpi .value{font-family:var(--serif);font-weight:600;font-size:26px;margin-top:3px;font-variant-numeric:lining-nums tabular-nums}
+  .kpi .delta{font-size:12.5px;margin-top:3px;font-weight:500}
+  .delta.up{color:var(--verde)} .delta.down{color:var(--rojo)} .delta.flat{color:var(--tinta-suave)}
+  .card{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:22px;margin-bottom:20px}
+  .card h3{font-family:var(--serif);font-weight:500;font-size:19px;margin-bottom:4px}
+  .card .sub{font-size:13px;color:var(--tinta-suave);margin-bottom:14px}
+  .card.analisis{background:var(--pino);border-color:var(--pino);color:#EDF3EF}
+  .card.analisis h3{color:#EDF3EF} .card.analisis .sub{color:#A8C4B4}
+  .card.analisis p.par{font-size:14.5px;line-height:1.65;margin-bottom:12px}
+
+  /* ---------- barras ---------- */
+  .barras{display:grid;grid-template-columns:minmax(120px,210px) 1fr auto;gap:7px 12px;align-items:center}
+  .barras .bn{font-size:13px;color:var(--tinta-suave);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .barras .bt{height:22px;background:#F3F0E8;border-radius:5px;overflow:hidden}
+  .barras .bt i{display:block;height:100%;border-radius:5px;min-width:3px}
+  .barras .bv{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* ---------- tablas ---------- */
+  .scroller{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--tinta-suave);padding:8px 10px;border-bottom:2px solid var(--linea);white-space:nowrap}
+  td{padding:8px 10px;border-bottom:1px solid var(--linea);font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right}
+  .suave{color:var(--tinta-suave)}
+  .nueva{color:var(--mar);font-weight:600}
+
+  /* ---------- botones / form ---------- */
+  .btn{background:var(--pino);color:#EDF3EF;border:1px solid var(--pino);border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600}
+  .btn:hover{background:var(--pino-claro)}
+  .btn:disabled{opacity:.6;cursor:wait}
+  .btn.sec{background:transparent;color:var(--tinta-suave);border-color:var(--linea);font-weight:500}
+  .btn.sec:hover{color:var(--tinta);border-color:var(--pino-claro);background:transparent}
+  .btn.peligro:hover{color:var(--rojo);border-color:var(--rojo)}
+  .btn.chico{padding:7px 14px;font-size:13px}
+  .acciones{display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:14px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--tinta-suave);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+  input[type=text],input[type=date],input[type=password],textarea{
+    width:100%;border:1px solid var(--linea);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--arena);color:var(--tinta)}
+  textarea{min-height:130px;font-family:var(--mono);font-size:12.5px}
+  textarea.prosa{font-family:inherit;font-size:14px;min-height:110px}
+  input:focus,textarea:focus{outline:2px solid var(--pino-claro);border-color:var(--pino-claro)}
+  button:focus-visible{outline:2px solid var(--mar);outline-offset:2px}
+  .hint{font-size:12.5px;color:var(--tinta-suave);margin-top:6px}
+  .aviso{border-left:3px solid var(--rojo);background:#FCEBEB;border-radius:0 10px 10px 0;padding:12px 16px;font-size:14px;margin:14px 0}
+  .vacio{text-align:center;padding:50px 20px;color:var(--tinta-suave)}
+  .vacio h2{font-family:var(--serif);font-weight:500;color:var(--tinta);margin-bottom:8px}
+
+  /* ---------- gráficos svg ---------- */
+  svg{display:block;width:100%;height:auto}
+  .leyenda{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;font-size:12px;color:var(--tinta-suave)}
+  .leyenda i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+  .leyenda i.linea{height:3px;border-radius:2px;vertical-align:3px;width:18px}
+
+  /* ---------- acceso ---------- */
+  .gate{position:fixed;inset:0;background:var(--pino);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
+  .gatebox{background:var(--papel);border-radius:16px;max-width:370px;width:100%;padding:28px}
+  .gatebox h1{font-size:23px;color:var(--tinta)}
+  .gatebox .sub{margin:2px 0 18px;color:var(--tinta-suave);font-size:13px}
+  .gatebox label{margin-top:12px}
+  .gatebox .go{width:100%;margin-top:18px}
+  .gateerr{margin-top:12px;font-size:13px;color:var(--rojo);min-height:18px}
+  .gatenote{margin-top:14px;padding-top:14px;border-top:1px solid var(--linea);font-size:12.5px;color:var(--tinta-suave);line-height:1.5}
+
+  /* ---------- modal equipo ---------- */
+  .modalbg{position:fixed;inset:0;background:rgba(30,59,50,.5);display:none;align-items:flex-start;justify-content:center;z-index:70;padding:18px;overflow-y:auto}
+  .modalbg.show{display:flex}
+  .modal{background:#fff;border-radius:14px;padding:22px;max-width:390px;width:100%;margin:auto}
+  .modal h3{font-family:var(--serif);font-weight:500;font-size:20px;margin-bottom:4px}
+  .modal p{color:var(--tinta-suave);font-size:13px;margin-bottom:12px}
+  .modal label{margin-top:18px}
+  .modal input{margin-bottom:8px}
+  .userrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--linea);font-family:var(--mono);font-size:13px}
+  .userrow span{flex:1}
+  .userrow .me{flex:0;font-family:var(--sans);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:#E1EFE8;color:var(--pino);padding:2px 7px;border-radius:99px}
+  .tokstate{font-size:12px;color:var(--tinta-suave);margin-bottom:8px}
+
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);background:var(--tinta);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:120;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:640px){
+    .barras{grid-template-columns:1fr auto}
+    .barras .bn{text-align:left;grid-column:1/-1;margin-bottom:-4px}
+    .card{padding:16px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gatebox">
+    <h1 id="gTitle">Tablero Meta Ads</h1>
+    <p class="sub" id="gSub">Mar Azul Suites</p>
+    <div id="gForm">
+      <label for="gUser">Usuario</label>
+      <input id="gUser" type="text" autocomplete="username" spellcheck="false">
+      <label for="gPass">Contraseña</label>
+      <input id="gPass" type="password" autocomplete="current-password">
+      <div id="gPass2wrap" style="display:none">
+        <label for="gPass2">Repetir contraseña</label>
+        <input id="gPass2" type="password" autocomplete="new-password">
+      </div>
+      <button class="btn go" id="gGo">Entrar</button>
+      <div class="gateerr" id="gErr"></div>
+    </div>
+    <div class="gatenote" id="gNote"></div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <header class="top">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Mar Azul Suites Apart Boutique</p>
+        <h1>Tablero semanal · Meta Ads</h1>
+      </div>
+      <div class="tools">
+        <span class="savedot" id="savedot"></span>
+        <span class="savedot">· <b id="whoami"></b></span>
+        <button class="tbtn" id="btnTeam">Equipo</button>
+        <button class="tbtn" id="btnImp">Importar</button>
+        <button class="tbtn" id="btnCsv">Exportar CSV</button>
+        <button class="tbtn" id="btnJson">Respaldo JSON</button>
+        <button class="tbtn" id="btnDrop" style="display:none">Descartar borrador</button>
+        <button class="tbtn solid" id="btnPub" style="display:none">Publicar cambios</button>
+        <input type="file" id="impFile" accept=".json,application/json" style="display:none">
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="tabs" id="tabs"></div>
+    <div id="contenido"></div>
+  </div>
+</div>
+
+<div class="modalbg" id="teamModal">
+  <div class="modal">
+    <h3>Equipo</h3>
+    <p>Cada persona entra con su usuario y su propia contraseña. Los cambios recién valen después de publicar.</p>
+    <div id="teamList"></div>
+    <label for="tUser">Agregar persona</label>
+    <input id="tUser" type="text" placeholder="usuario" spellcheck="false">
+    <input id="tPass" type="password" placeholder="contraseña inicial (12+)" autocomplete="new-password">
+    <button class="btn sec chico" id="tAdd">Agregar</button>
+    <label for="tNewPass">Cambiar mi contraseña</label>
+    <input id="tNewPass" type="password" placeholder="nueva contraseña (12+)" autocomplete="new-password">
+    <button class="btn sec chico" id="tChange">Cambiar</button>
+    <label for="tToken">Publicación directa a GitHub</label>
+    <div class="tokstate" id="tTokState"></div>
+    <input id="tToken" type="password" placeholder="pegá acá el token de GitHub" autocomplete="off">
+    <div class="acciones">
+      <button class="btn sec chico" id="tTokSave">Guardar token</button>
+      <button class="btn sec chico peligro" id="tTokDrop">Quitar</button>
+    </div>
+    <div class="acciones" style="justify-content:flex-end;margin-top:18px"><button class="btn chico" id="tClose">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+const REPO="agustinalvarezspj/ads-marazul";
+const APP="ads-marazul";
+const KEYD="ads_marazul_draft";
+const KEYT="ads_marazul_token";
+
+let state={ semanas:[], vista:null, editando:null };
+let saveTimer=null;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nf=(v,d)=>v.toLocaleString("es-AR",{maximumFractionDigits:d||0});
+const money=v=>"$"+Math.round(v).toLocaleString("es-AR");
+const moneyM=v=>"$"+(v/1e6).toLocaleString("es-AR",{maximumFractionDigits:2})+"M";
+const pct=v=>(v==null?"—":nf(v,2)+"%");
+const fmtDia=iso=>parseInt(iso.slice(8,10),10)+"/"+parseInt(iso.slice(5,7),10);
+const MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const mesDe=iso=>MESES[parseInt(iso.slice(5,7),10)-1]+" "+iso.slice(0,4);
+const hoyAR=()=>new Date(Date.now()-3*3600000).toISOString().slice(0,10);
+
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2600);}
+
+/* ---- números formato AR ($173.704,00 / 6,66% / 6,3) ---- */
+function parseNum(s){
+  if(s==null) return null;
+  s=String(s).replace(/[$%\s]/g,"").trim();
+  if(!s) return null;
+  if(s.includes(",")) s=s.replace(/\./g,"").replace(",",".");
+  else if(/\.\d{3}(\.|$)/.test(s)) s=s.replace(/\./g,"");
+  const n=parseFloat(s);
+  return isNaN(n)?null:n;
+}
+/* inverso, para rearmar el pegado al editar (coma decimal, sin miles) */
+const numAR=v=>v==null?"":String(v).replace(".",",");
+
+/* ---- filas pegadas desde la planilla ----
+   columnas: campaña, conversaciones, presupuesto, costo x conv, alcance, impresiones, frecuencia, CTR */
+function parseTSV(texto){
+  const out=[];
+  for(const fila of texto.split(/\r?\n/)){
+    const c=fila.split("\t").map(x=>x.trim());
+    if(c.length<3) continue;
+    const nombre=c[0];
+    if(!nombre || /^(campañ|total|agosto|julio|septiembre|octubre|noviembre|diciembre|enero|febrero|marzo|abril|mayo|junio|- de|\+2)\b/i.test(nombre)) continue;
+    const conv=parseNum(c[1]);
+    if(conv==null) continue;
+    out.push({ nombre, conv, presupuesto:parseNum(c[2])||0, alcance:parseNum(c[4]),
+               impresiones:parseNum(c[5]), frec:parseNum(c[6]), ctr:parseNum(c[7]) });
+  }
+  return out;
+}
+
+/* ===================== CIFRADO =====================
+   datos.json publicado = sobre cifrado. Adentro, una clave maestra
+   aleatoria cifra los datos; esa clave va guardada una vez por usuario,
+   envuelta con su propia contraseña. Nadie ve la contraseña del otro
+   y el archivo suelto no sirve para nada.                            */
+const ITERS=600000;
+const TE=new TextEncoder(), TD=new TextDecoder();
+function b64(buf){ const u=new Uint8Array(buf); let s=""; for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); }
+const ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const rand=n=>crypto.getRandomValues(new Uint8Array(n));
+
+async function kdf(pass,salt){
+  const km=await crypto.subtle.importKey("raw",TE.encode(pass),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITERS,hash:"SHA-256"},
+    km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+const rawKey=raw=>crypto.subtle.importKey("raw",raw,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+async function seal(key,bytes){ const iv=rand(12);
+  return {iv:b64(iv),ct:b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes))}; }
+async function open_(key,iv,ct){
+  return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(iv)},key,ub64(ct))); }
+async function wrapFor(user,pass,master){
+  const salt=rand(16); const k=await kdf(pass,salt); const s=await seal(k,master);
+  return {u:user,salt:b64(salt),iv:s.iv,wk:s.ct};
+}
+
+let envelope=null, MASTER=null, MKEY=null, CURUSER=null;
+let published=null, dirty=false, semilla=null;
+const stamp=()=>new Date().toISOString();
+const norm=s=>s.trim().toLowerCase();
+const payload=()=>TE.encode(JSON.stringify({semanas:state.semanas}));
+
+async function buildEnvelope(){
+  const s=await seal(MKEY,payload());
+  return {enc:1,app:APP,iters:ITERS,updated:stamp(),users:envelope.users,iv:s.iv,ct:s.ct};
+}
+
+/* ===================== ACCESO ===================== */
+const gErr=m=>{ $("#gErr").textContent=m||""; };
+let failedTries=0;
+
+/* El alta del primer usuario SOLO se permite abriendo el archivo desde tu
+   computadora. En el sitio publicado nunca se muestra el formulario, así
+   nadie puede adelantarse y quedarse con el tablero.                     */
+const LOCAL = location.protocol==="file:" ||
+              location.hostname==="localhost" || location.hostname==="127.0.0.1";
+
+/* semilla-ads.js vive solo en la compu del administrador (está en .gitignore):
+   si existe, el primer acceso arranca con esos cortes ya cargados. */
+function cargarSemilla(){
+  return new Promise(res=>{
+    const s=document.createElement("script");
+    s.src="semilla-ads.js";
+    s.onload=()=>res(limpiarCortes(window.SEMILLA_ADS));
+    s.onerror=()=>res(null);
+    document.head.appendChild(s);
+  });
+}
+
+async function bootGate(){
+  let remote=null;
+  try{ const r=await fetch("datos.json?v="+Date.now(),{cache:"no-store"}); if(r.ok) remote=await r.json(); }
+  catch(e){ /* abierto como archivo suelto */ }
+  envelope=(remote && remote.enc)?remote:null;
+
+  if(envelope){
+    $("#gNote").textContent="Los datos están cifrados. Si perdés la contraseña no hay forma de recuperarlos.";
+    $("#gUser").focus();
+  }else if(LOCAL){
+    semilla=await cargarSemilla();
+    $("#gTitle").textContent="Primer acceso";
+    $("#gSub").textContent="Creá tu usuario para cifrar el tablero.";
+    $("#gPass2wrap").style.display="";
+    $("#gPass").autocomplete="new-password";
+    $("#gGo").textContent="Crear y cifrar";
+    $("#gNote").textContent="Usá una frase larga, de 12 caracteres para arriba (ideal 4 o 5 palabras). Anotala en tu gestor de contraseñas antes de seguir: no se puede recuperar."
+      +(semilla&&semilla.length?" Se van a cargar "+semilla.length+" cortes desde semilla-ads.js.":"");
+    $("#gUser").focus();
+  }else{
+    $("#gTitle").textContent="Tablero sin inicializar";
+    $("#gSub").textContent="Todavía no tiene usuarios.";
+    $("#gForm").style.display="none";
+    $("#gNote").textContent="El primer usuario se crea abriendo el archivo index.html desde la computadora del administrador, no desde acá. Hasta entonces no se puede entrar.";
+  }
+}
+
+$("#gGo").onclick=submitGate;
+["gUser","gPass","gPass2"].forEach(id=>{
+  $("#"+id).addEventListener("keydown",e=>{ if(e.key==="Enter") submitGate(); });
+});
+
+async function submitGate(){
+  const u=norm($("#gUser").value), p=$("#gPass").value;
+  gErr("");
+  if(!u||!p){ gErr("Completá usuario y contraseña."); return; }
+  $("#gGo").disabled=true; $("#gGo").textContent="Un momento…";
+  try{
+    if(envelope) await doLogin(u,p);
+    else await doSetup(u,p,$("#gPass2").value);
+  }catch(err){
+    failedTries++;
+    gErr(err.message||"No se pudo entrar.");
+    await new Promise(r=>setTimeout(r,Math.min(4000,600*failedTries)));
+  }
+  $("#gGo").disabled=false;
+  $("#gGo").textContent = (envelope&&envelope.iv)?"Entrar":"Crear y cifrar";
+}
+
+async function doLogin(u,p){
+  const e=envelope.users.find(x=>x.u===u);
+  const fake=e||{salt:b64(rand(16)),iv:b64(rand(12)),wk:b64(rand(48))};
+  let master;
+  try{
+    const k=await kdf(p,ub64(fake.salt));
+    master=await open_(k,fake.iv,fake.wk);
+  }catch(err){ throw new Error("Usuario o contraseña incorrectos."); }
+  MASTER=master; MKEY=await rawKey(master); CURUSER=u;
+  const raw=await open_(MKEY,envelope.iv,envelope.ct);
+  published=JSON.parse(TD.decode(raw)); published.updated=envelope.updated;
+  await start();
+}
+
+async function doSetup(u,p,p2){
+  if(p.length<12) throw new Error("Mínimo 12 caracteres.");
+  if(p!==p2) throw new Error("Las contraseñas no coinciden.");
+  MASTER=rand(32); MKEY=await rawKey(MASTER); CURUSER=u;
+  envelope={enc:1,app:APP,iters:ITERS,users:[await wrapFor(u,p,MASTER)]};
+  published=null;
+  await start();
+  if(!state.semanas.length && semilla && semilla.length){
+    state.semanas=semilla; ordenar();
+    state.vista=state.semanas[state.semanas.length-1].id;
+    save(); render();
+  }
+  dirty=true; markState();
+  toast("Cifrado listo. Publicá para que quede guardado.");
+}
+
+/* ===================== DATOS ===================== */
+const ordenar=()=>state.semanas.sort((a,b)=>a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0);
+
+async function start(){
+  $("#gate").style.display="none";
+  $("#app").style.display="";
+  $("#gPass").value=""; $("#gPass2").value="";
+  let local=null;
+  try{
+    const d=JSON.parse(localStorage.getItem(KEYD)||"null");
+    if(d){ local=JSON.parse(TD.decode(await open_(MKEY,d.iv,d.ct))); local.updated=d.updated; }
+  }catch(e){ local=null; /* borrador de otra clave o corrupto: se ignora */ }
+
+  const localNewer = local && (!published || (local.updated||"") > (published.updated||""));
+  const src = localNewer ? local : published;
+  dirty = !!localNewer;
+  state.semanas = src ? JSON.parse(JSON.stringify(src.semanas||[])) : [];
+  ordenar();
+  state.vista = state.semanas.length ? state.semanas[state.semanas.length-1].id : null;
+  $("#whoami").textContent=CURUSER;
+  markState(); render();
+}
+
+function markState(){
+  const d=$("#savedot");
+  if(dirty){ d.innerHTML='<b style="color:#F3B9AC">● borrador sin publicar</b>'; $("#btnPub").style.display=""; $("#btnDrop").style.display=""; }
+  else{
+    const u=published&&published.updated;
+    d.textContent = u ? "publicado "+new Date(u).toLocaleString("es-AR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "sin publicar";
+    $("#btnPub").style.display="none"; $("#btnDrop").style.display="none";
+  }
+}
+
+function save(){
+  clearTimeout(saveTimer);
+  dirty=true; markState();
+  saveTimer=setTimeout(async()=>{
+    try{
+      const s=await seal(MKEY,payload());
+      localStorage.setItem(KEYD,JSON.stringify({updated:stamp(),iv:s.iv,ct:s.ct}));
+    }catch(e){ $("#savedot").textContent="no se pudo guardar el borrador"; }
+  },400);
+}
+
+/* acepta {semanas:[...]} o [...] y deja solo los campos conocidos */
+function limpiarCortes(j){
+  const arr=Array.isArray(j)?j:(j&&Array.isArray(j.semanas)?j.semanas:null);
+  if(!arr) return null;
+  const n=v=>(typeof v==="number"&&isFinite(v))?v:null;
+  const out=[];
+  for(const s of arr){
+    if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s.fecha||"") || !Array.isArray(s["campañas"])) continue;
+    out.push({
+      id:String(s.id||("w-"+s.fecha)), label:String(s.label||fmtDia(s.fecha)), fecha:s.fecha,
+      reservas:n(s.reservas), facturacion:n(s.facturacion),
+      analisis:s.analisis?String(s.analisis):null,
+      "campañas":s["campañas"].filter(c=>c&&c.nombre).map(c=>({ nombre:String(c.nombre), conv:n(c.conv)||0,
+        presupuesto:n(c.presupuesto)||0, alcance:n(c.alcance), impresiones:n(c.impresiones), frec:n(c.frec), ctr:n(c.ctr) }))
+    });
+  }
+  return out;
+}
+
+/* ===================== MÉTRICAS ===================== */
+function metricas(s){
+  const inversion=s["campañas"].reduce((a,c)=>a+(c.presupuesto||0),0);
+  const conv=s["campañas"].reduce((a,c)=>a+(c.conv||0),0);
+  return { inversion, conv,
+    costoConv: conv?inversion/conv:null,
+    roas: (s.facturacion&&inversion)?s.facturacion/inversion:null,
+    costoReserva: (s.reservas&&inversion)?inversion/s.reservas:null,
+    conversion: (s.reservas&&conv)?s.reservas/conv*100:null,
+    ticket: (s.reservas&&s.facturacion)?s.facturacion/s.reservas:null,
+    pctAds: (s.facturacion&&inversion)?inversion/s.facturacion*100:null };
+}
+
+/* métricas del PERÍODO: lo que sumó este corte respecto del anterior del mismo mes
+   (acumulado de hoy menos acumulado anterior); el primer corte del mes arranca de cero */
+function periodoDe(s){
+  const i=state.semanas.findIndex(x=>x.id===s.id);
+  const mes=s.fecha.slice(0,7);
+  const prev=(i>0 && state.semanas[i-1].fecha.slice(0,7)===mes)?state.semanas[i-1]:null;
+  const m=metricas(s), mp=prev?metricas(prev):null;
+  const dias=prev ? Math.max(1,Math.round((new Date(s.fecha)-new Date(prev.fecha))/86400000))
+                  : Math.max(1,parseInt(s.fecha.slice(8,10),10));
+  const inc={ dias, desde:prev?prev.fecha:s.fecha.slice(0,8)+"01", hasta:s.fecha, prevCorte:prev,
+    inversion:m.inversion-(mp?mp.inversion:0),
+    conv:m.conv-(mp?mp.conv:0),
+    reservas:(s.reservas!=null&&(!prev||prev.reservas!=null))?s.reservas-(prev?prev.reservas:0):null,
+    facturacion:(s.facturacion!=null&&(!prev||prev.facturacion!=null))?s.facturacion-(prev?prev.facturacion:0):null };
+  inc.costoConv=inc.conv>0?inc.inversion/inc.conv:null;
+  inc.roas=(inc.facturacion&&inc.inversion)?inc.facturacion/inc.inversion:null;
+  inc.costoReserva=(inc.reservas&&inc.inversion)?inc.inversion/inc.reservas:null;
+  inc.conversion=(inc.reservas!=null&&inc.conv>0)?inc.reservas/inc.conv*100:null;
+  inc.ticket=(inc.reservas&&inc.facturacion)?inc.facturacion/inc.reservas:null;
+  return inc;
+}
+
+function delta(actual,previo,invertir){
+  if(actual==null||previo==null||previo===0) return "";
+  const d=(actual-previo)/previo*100;
+  if(Math.abs(d)<0.5) return '<p class="delta flat">≈ igual ritmo</p>';
+  const mejor=invertir?d<0:d>0;
+  return '<p class="delta '+(mejor?"up":"down")+'">'+(d>0?"▲":"▼")+" "+nf(Math.abs(d),1)+"% vs. período anterior</p>";
+}
+const kpi=(label,value,extra)=>'<div class="kpi"><p class="label">'+label+'</p><p class="value">'+value+"</p>"+(extra||"")+"</div>";
+
+/* ===================== RENDER ===================== */
+function render(){
+  const tabs=$("#tabs"); tabs.innerHTML="";
+  const add=(txt,cls,fn)=>{ const b=document.createElement("button"); b.className="tab "+cls; b.textContent=txt; b.onclick=fn; tabs.appendChild(b); return b; };
+  let mes=null;
+  for(const s of state.semanas){
+    if(s.fecha.slice(0,4)!==mes){
+      mes=s.fecha.slice(0,4);
+      if(state.semanas[0].fecha.slice(0,4)!==state.semanas[state.semanas.length-1].fecha.slice(0,4)){
+        const m=document.createElement("span"); m.className="tab mes"; m.textContent=mes; tabs.appendChild(m);
+      }
+    }
+    add(s.label, state.vista===s.id?"activa":"", ()=>{ state.vista=s.id; render(); });
+  }
+  add("Evolución","especial"+(state.vista==="evolucion"?" activa":""),()=>{ state.vista="evolucion"; render(); });
+  add("+ Nuevo corte","especial"+(state.vista==="form"&&!state.editando?" activa":""),()=>{ state.vista="form"; state.editando=null; render(); });
+
+  const cont=$("#contenido");
+  if(state.vista==="form") return renderForm(cont);
+  if(state.vista==="evolucion") return renderEvolucion(cont);
+  const s=state.semanas.find(x=>x.id===state.vista);
+  if(!s){
+    cont.innerHTML='<div class="card vacio"><h2>Sin cortes todavía</h2><p>Cargá el primero con <b>+ Nuevo corte</b>, o traé los históricos con <b>Importar</b> (semilla-ads.json).</p></div>';
+    return;
+  }
+  renderSemana(cont,s);
+}
+
+function colorEscala(vals,invertir){
+  const min=Math.min.apply(null,vals), max=Math.max.apply(null,vals);
+  return vals.map(v=>{
+    if(max===min) return "#1D9E75";
+    let t=(v-min)/(max-min); if(invertir) t=1-t;
+    return t>0.66?"#1D9E75":t>0.33?"#8B8A82":"#C4432B";
+  });
+}
+function barras(items,fmt,invertir){
+  if(!items.length) return '<p class="suave">Sin datos.</p>';
+  const vals=items.map(x=>x.v), max=Math.max.apply(null,vals)||1, col=colorEscala(vals,invertir);
+  return '<div class="barras">'+items.map((x,i)=>
+    '<div class="bn" title="'+esc(x.n)+'">'+esc(x.n)+'</div><div class="bt"><i style="width:'+(x.v/max*100).toFixed(1)+"%;background:"+col[i]+'"></i></div><div class="bv">'+fmt(x.v)+"</div>").join("")+"</div>";
+}
+
+function renderSemana(cont,s){
+  const m=metricas(s), camps=s["campañas"];
+  const i=state.semanas.findIndex(x=>x.id===s.id);
+  const per=periodoDe(s), pp=i>0?periodoDe(state.semanas[i-1]):null;
+  const rate=(p,k)=>(p&&p[k]!=null)?p[k]/p.dias:null;
+
+  let h='<p class="seccion" style="margin-top:0">Acumulado del mes · '+esc(mesDe(s.fecha))+" al "+fmtDia(s.fecha)+'</p><div class="kpis">'
+    +kpi("Inversión",money(m.inversion))
+    +kpi("Conversaciones",nf(m.conv))
+    +kpi("Costo x conversación",m.costoConv?money(m.costoConv):"—")
+    +(s.reservas!=null?kpi("Reservas",nf(s.reservas)):"")
+    +(s.facturacion!=null?kpi("Facturación",moneyM(s.facturacion)):"")
+    +(m.roas?kpi("ROAS",nf(m.roas,1)+"x"):"")
+    +(m.costoReserva?kpi("Costo por reserva",money(m.costoReserva)):"")
+    +(m.conversion?kpi("Conv → reserva",pct(m.conversion)):"")
+    +(m.ticket?kpi("Ticket promedio",money(m.ticket)):"")
+    +(m.pctAds?kpi("Ads / facturación",pct(m.pctAds)):"")
+    +"</div>";
+
+  h+='<p class="seccion">El período · '+per.dias+" día"+(per.dias>1?"s":"")+" ("+fmtDia(per.desde)+" → "+fmtDia(per.hasta)+")"+(pp?" · flechas vs. ritmo diario del período anterior":"")+'</p><div class="kpis">'
+    +kpi("Inversión del período",money(per.inversion),'<p class="delta flat">'+money(per.inversion/per.dias)+"/día</p>"+delta(rate(per,"inversion"),rate(pp,"inversion")))
+    +kpi("Conversaciones del período",nf(per.conv),'<p class="delta flat">'+nf(per.conv/per.dias,1)+"/día</p>"+delta(rate(per,"conv"),rate(pp,"conv")))
+    +kpi("Costo x conv del período",per.costoConv?money(per.costoConv):"—",delta(per.costoConv,pp?pp.costoConv:null,true))
+    +(per.reservas!=null?kpi("Reservas del período",nf(per.reservas),'<p class="delta flat">'+nf(per.reservas/per.dias,1)+"/día</p>"+delta(rate(per,"reservas"),rate(pp,"reservas"))):"")
+    +(per.facturacion!=null?kpi("Facturación del período",moneyM(per.facturacion),'<p class="delta flat">'+money(per.facturacion/per.dias)+"/día</p>"+delta(rate(per,"facturacion"),rate(pp,"facturacion"))):"")
+    +(per.roas?kpi("ROAS del período",nf(per.roas,1)+"x",delta(per.roas,pp?pp.roas:null)):"")
+    +(per.costoReserva?kpi("Costo por reserva del período",money(per.costoReserva),delta(per.costoReserva,pp?pp.costoReserva:null,true)):"")
+    +(per.conversion!=null?kpi("Conv → reserva del período",pct(per.conversion),delta(per.conversion,pp?pp.conversion:null)):"")
+    +(per.ticket?kpi("Ticket del período",money(per.ticket),delta(per.ticket,pp?pp.ticket:null)):"")
+    +"</div>";
+
+  const porCosto=camps.filter(c=>c.conv>0).map(c=>({n:c.nombre,v:c.presupuesto/c.conv})).sort((a,b)=>a.v-b.v);
+  const porConv=camps.map(c=>({n:c.nombre,v:c.conv})).sort((a,b)=>b.v-a.v);
+  const porCtr=camps.filter(c=>c.ctr!=null).map(c=>({n:c.nombre,v:c.ctr})).sort((a,b)=>b.v-a.v);
+  h+='<div class="card"><h3>Costo por conversación</h3><p class="sub">Ordenado de más eficiente a más caro · acumulado del mes</p>'+barras(porCosto,money,true)+"</div>";
+  h+='<div class="card"><h3>Conversaciones generadas</h3><p class="sub">Volumen acumulado del mes</p>'+barras(porConv,v=>nf(v),false)+"</div>";
+  h+='<div class="card"><h3>CTR</h3><p class="sub">La calidad del mensaje: qué anuncio muerde</p>'+barras(porCtr,pct,false)+"</div>";
+
+  const conPer=!!per.prevCorte;
+  h+='<div class="card"><h3>Detalle por campaña</h3>'+(conPer?'<p class="sub">Las columnas "período" muestran solo lo que cada campaña sumó desde el corte del '+fmtDia(per.prevCorte.fecha)+"</p>":'<p class="sub">Primer corte del mes: acumulado y período coinciden</p>')
+    +'<div class="scroller"><table><thead><tr><th>Campaña</th><th class="num">Conv.</th><th class="num">Presupuesto</th><th class="num">Costo x conv</th>'
+    +(conPer?'<th class="num">Conv. período</th><th class="num">Costo x conv período</th>':"")
+    +'<th class="num">Alcance</th><th class="num">Impresiones</th><th class="num">Frec.</th><th class="num">CTR</th></tr></thead><tbody>';
+  for(const c of camps.slice().sort((a,b)=>b.conv-a.conv)){
+    let cp="";
+    if(conPer){
+      const antes=per.prevCorte["campañas"].find(x=>x.nombre===c.nombre);
+      const dC=c.conv-(antes?antes.conv:0), dP=c.presupuesto-(antes?antes.presupuesto:0);
+      if(dC===0 && Math.abs(dP)<1) cp='<td class="num suave">pausada</td><td class="num suave">—</td>';
+      else cp='<td class="num">'+(antes?"":'<span class="nueva">nueva </span>')+nf(dC)+'</td><td class="num">'+(dC>0?money(dP/dC):"—")+"</td>";
+    }
+    h+="<tr><td>"+esc(c.nombre)+'</td><td class="num">'+nf(c.conv)+'</td><td class="num">'+money(c.presupuesto)+'</td><td class="num">'+(c.conv?money(c.presupuesto/c.conv):"—")+"</td>"+cp
+      +'<td class="num">'+(c.alcance!=null?nf(c.alcance):"—")+'</td><td class="num">'+(c.impresiones!=null?nf(c.impresiones):"—")+'</td><td class="num">'+(c.frec!=null?nf(c.frec,2):"—")+'</td><td class="num">'+(c.ctr!=null?pct(c.ctr):"—")+"</td></tr>";
+  }
+  h+="</tbody></table></div></div>";
+
+  if(s.analisis){
+    h+='<div class="card analisis"><h3>Análisis y recomendaciones</h3><p class="sub">Devolución de Claude sobre este corte</p>'
+      +s.analisis.split(/\n\n+/).map(p=>'<p class="par">'+esc(p).replace(/^(MI LECTURA:|QUÉ HARÍA:)/,"<strong>$1</strong>").replace(/\n/g,"<br>")+"</p>").join("")+"</div>";
+  }
+  h+='<div class="acciones"><button class="btn chico" id="bEdit">Editar este corte</button><button class="btn sec chico peligro" id="bDel">Eliminar</button></div>';
+  cont.innerHTML=h;
+  $("#bEdit").onclick=()=>{ state.editando=s.id; state.vista="form"; render(); };
+  $("#bDel").onclick=()=>{
+    if(!confirm('¿Eliminar "'+s.label+'"? No se puede deshacer.')) return;
+    state.semanas=state.semanas.filter(x=>x.id!==s.id);
+    state.vista=state.semanas.length?state.semanas[state.semanas.length-1].id:null;
+    save(); render();
+  };
+}
+
+/* ---- gráfico combinado barras + línea (dos ejes), en SVG ---- */
+function techo(v){ if(!(v>0)) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))), f=v/p; return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p; }
+function combo(cortes,bars,line,o){
+  const W=940,H=310,mL=70,mR=70,mT=14,mB=50,n=cortes.length;
+  const bmax=techo(Math.max.apply(null,bars.map(v=>v||0))), lmax=techo(Math.max.apply(null,line.map(v=>v||0)));
+  const paso=(W-mL-mR)/n, bw=Math.min(paso*.62,40);
+  const X=i=>mL+paso*(i+.5), Yb=v=>mT+(1-v/bmax)*(H-mT-mB), Yl=v=>mT+(1-v/lmax)*(H-mT-mB);
+  const f='font-family="ui-sans-serif,Segoe UI,sans-serif" font-size="11"';
+  let g='<svg viewBox="0 0 '+W+" "+H+'" role="img" aria-label="'+esc(o.titulo)+'">';
+  for(let k=0;k<=4;k++){
+    const y=mT+(1-k/4)*(H-mT-mB);
+    g+='<line x1="'+mL+'" y1="'+y+'" x2="'+(W-mR)+'" y2="'+y+'" stroke="#E3DFD4"/>'
+      +'<text x="'+(mL-8)+'" y="'+(y+4)+'" text-anchor="end" '+f+' fill="#5C6B64">'+o.fb(bmax*k/4)+"</text>"
+      +'<text x="'+(W-mR+8)+'" y="'+(y+4)+'" '+f+' fill="'+o.cl+'">'+o.fl(lmax*k/4)+"</text>";
+  }
+  cortes.forEach((s,i)=>{
+    const sep=i>0 && cortes[i-1].fecha.slice(0,7)!==s.fecha.slice(0,7);
+    if(sep) g+='<line x1="'+(X(i)-paso/2)+'" y1="'+mT+'" x2="'+(X(i)-paso/2)+'" y2="'+(H-mB+34)+'" stroke="#C9C4B6" stroke-dasharray="3 3"/>';
+    if(bars[i]!=null) g+='<rect x="'+(X(i)-bw/2)+'" y="'+Yb(bars[i])+'" width="'+bw+'" height="'+Math.max(0,H-mB-Yb(bars[i]))+'" rx="4" fill="'+o.cb+'"><title>'+esc(s.label)+" · "+o.nb+": "+o.tb(bars[i])+"</title></rect>";
+    g+='<text x="'+X(i)+'" y="'+(H-mB+16)+'" text-anchor="middle" '+f+' fill="#5C6B64">'+fmtDia(s.fecha)+"</text>";
+    if(i===0||sep) g+='<text x="'+(X(i)-paso/2+4)+'" y="'+(H-mB+33)+'" '+f+' fill="#8B8A82" font-weight="600">'+esc(MESES[parseInt(s.fecha.slice(5,7),10)-1].toUpperCase())+"</text>";
+  });
+  const pts=line.map((v,i)=>v==null?null:[X(i),Yl(v),i]).filter(Boolean);
+  if(pts.length>1) g+='<path d="'+pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")+'" fill="none" stroke="'+o.cl+'" stroke-width="2.4" stroke-linejoin="round"/>';
+  pts.forEach(p=>{ g+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="#fff" stroke="'+o.cl+'" stroke-width="2.2"><title>'+esc(cortes[p[2]].label)+" · "+o.nl+": "+o.tl(line[p[2]])+"</title></circle>"; });
+  g+="</svg>";
+  return '<div class="card"><h3>'+esc(o.titulo)+'</h3><p class="sub">'+o.sub+'</p><div class="scroller"><div style="min-width:'+Math.max(520,n*46)+'px">'+g+'</div></div>'
+    +'<div class="leyenda"><span><i style="background:'+o.cb+'"></i>'+o.nb+' (eje izq.)</span><span><i class="linea" style="background:'+o.cl+'"></i>'+o.nl+" (eje der.)</span></div></div>";
+}
+
+function renderEvolucion(cont){
+  const S=state.semanas;
+  if(S.length<2){ cont.innerHTML='<div class="card vacio"><h2>Todavía falta historia</h2><p>Con dos o más cortes cargados, acá vas a ver la evolución de todas las métricas.</p></div>'; return; }
+  const ms=S.map(metricas);
+  const k=v=>v>=1e6?moneyM(v):"$"+nf(v/1000)+"K";
+
+  /* cierres: el último corte de cada mes */
+  const cierres=[]; S.forEach((s,i)=>{ if(i===S.length-1 || S[i+1].fecha.slice(0,7)!==s.fecha.slice(0,7)) cierres.push(s); });
+  let h='<div class="card"><h3>Mes a mes</h3><p class="sub">Último corte cargado de cada mes · variación contra el mes anterior</p><div class="scroller"><table><thead><tr><th>Mes</th><th class="num">Facturación</th><th class="num">Reservas</th><th class="num">Inversión</th><th class="num">ROAS</th><th class="num">Costo x reserva</th><th class="num">Conv.</th><th class="num">Costo x conv</th><th class="num">Conv → reserva</th><th class="num">Ticket</th></tr></thead><tbody>';
+  let ant=null;
+  const var_=(a,b,inv)=>{ if(a==null||b==null||!b) return ""; const d=(a-b)/b*100; if(Math.abs(d)<0.5) return ""; return ' <span class="delta '+((inv?d<0:d>0)?"up":"down")+'">'+(d>0?"+":"")+nf(d,0)+"%</span>"; };
+  for(const s of cierres){
+    const m=metricas(s), a=ant?metricas(ant):null;
+    const parcial=parseInt(s.fecha.slice(8,10),10)<28;
+    h+="<tr><td>"+esc(mesDe(s.fecha))+(parcial?' <span class="suave">(al '+fmtDia(s.fecha)+")</span>":"")+"</td>"
+      +'<td class="num">'+(s.facturacion!=null?moneyM(s.facturacion)+var_(s.facturacion,ant&&ant.facturacion):"—")+"</td>"
+      +'<td class="num">'+(s.reservas!=null?nf(s.reservas)+var_(s.reservas,ant&&ant.reservas):"—")+"</td>"
+      +'<td class="num">'+money(m.inversion)+var_(m.inversion,a&&a.inversion,true)+"</td>"
+      +'<td class="num">'+(m.roas?nf(m.roas,1)+"x":"—")+"</td>"
+      +'<td class="num">'+(m.costoReserva?money(m.costoReserva)+var_(m.costoReserva,a&&a.costoReserva,true):"—")+"</td>"
+      +'<td class="num">'+nf(m.conv)+"</td>"
+      +'<td class="num">'+(m.costoConv?money(m.costoConv)+var_(m.costoConv,a&&a.costoConv,true):"—")+"</td>"
+      +'<td class="num">'+(m.conversion?pct(m.conversion):"—")+"</td>"
+      +'<td class="num">'+(m.ticket?money(m.ticket)+var_(m.ticket,a&&a.ticket):"—")+"</td></tr>";
+    ant=s;
+  }
+  h+="</tbody></table></div></div>";
+
+  const sub="Cada punto es un corte; los valores son acumulados del mes y vuelven a cero al cambiar de mes";
+  h+=combo(S,ms.map(m=>m.inversion),S.map(s=>s.facturacion),{titulo:"Inversión y facturación",sub,nb:"Inversión",nl:"Facturación",cb:"#2E5547",cl:"#2A6F8E",fb:k,fl:k,tb:money,tl:money});
+  h+=combo(S,ms.map(m=>m.conv),ms.map(m=>m.costoConv),{titulo:"Conversaciones y costo por conversación",sub,nb:"Conversaciones",nl:"Costo x conv",cb:"#1D9E75",cl:"#C98500",fb:v=>nf(v),fl:money,tb:v=>nf(v),tl:money});
+  h+=combo(S,S.map(s=>s.reservas),ms.map(m=>m.conversion),{titulo:"Reservas y conversión",sub:"Solo cortes con reservas cargadas",nb:"Reservas",nl:"Conv → reserva",cb:"#1E3B32",cl:"#C4432B",fb:v=>nf(v,1),fl:v=>nf(v,1)+"%",tb:v=>nf(v),tl:pct});
+  cont.innerHTML=h;
+}
+
+/* ===================== CARGA ===================== */
+function renderForm(cont){
+  const s=state.editando?state.semanas.find(x=>x.id===state.editando):null;
+  const tsv=s?s["campañas"].map(c=>[c.nombre,numAR(c.conv),numAR(c.presupuesto),"",numAR(c.alcance),numAR(c.impresiones),numAR(c.frec),numAR(c.ctr)].join("\t")).join("\n"):"";
+  cont.innerHTML='<div class="card"><h3>'+(s?"Editar corte":"Nuevo corte")+'</h3>'
+    +'<p class="sub">Los números son siempre el <b>acumulado del mes</b> a la fecha de corte; el tablero calcula solo lo que sumó el período.</p>'
+    +'<div class="form-grid">'
+    +'<div><label for="fLabel">Nombre de la solapa</label><input type="text" id="fLabel" placeholder="Octubre · al 9/10"></div>'
+    +'<div><label for="fFecha">Fecha de corte</label><input type="date" id="fFecha"></div>'
+    +'<div><label for="fReservas">Reservas (opcional)</label><input type="text" id="fReservas" placeholder="29" inputmode="numeric"></div>'
+    +'<div><label for="fFact">Facturación (opcional)</label><input type="text" id="fFact" placeholder="18.718.447" inputmode="decimal"></div>'
+    +"</div>"
+    +'<label for="fTSV">Campañas (pegar desde la planilla)</label>'
+    +'<textarea id="fTSV" spellcheck="false" placeholder="Pileta&#9;533&#9;$149.748,25&#9;$280,95&#9;29234&#9;44341&#9;1,52&#9;7,11%"></textarea>'
+    +'<p class="hint">Seleccioná en Sheets desde la primera campaña hasta la última fila con datos (sin encabezados) y pegá con Ctrl+V. Orden de columnas: campaña · conversaciones · presupuesto · costo x conv · alcance · impresiones · frecuencia · CTR.</p>'
+    +'<div style="margin-top:14px"><label for="fAnalisis">Análisis y recomendaciones (opcional)</label>'
+    +'<textarea id="fAnalisis" class="prosa" placeholder="La devolución de Claude sobre este corte."></textarea></div>'
+    +'<div id="fAviso"></div>'
+    +'<div class="acciones" style="margin-top:14px"><button class="btn" id="fOk">'+(s?"Guardar cambios":"Agregar corte")+"</button>"
+    +(s?'<button class="btn sec" id="fCancel">Cancelar</button>':"")+"</div></div>";
+  $("#fLabel").value=s?s.label:"";
+  $("#fFecha").value=s?s.fecha:hoyAR();
+  $("#fReservas").value=s&&s.reservas!=null?s.reservas:"";
+  $("#fFact").value=s&&s.facturacion!=null?numAR(s.facturacion):"";
+  $("#fTSV").value=tsv;
+  $("#fAnalisis").value=s&&s.analisis?s.analisis:"";
+  $("#fOk").onclick=guardarCorte;
+  if(s) $("#fCancel").onclick=()=>{ state.vista=state.editando; state.editando=null; render(); };
+}
+
+function guardarCorte(){
+  const aviso=m=>{ $("#fAviso").innerHTML='<div class="aviso">'+m+"</div>"; };
+  const label=$("#fLabel").value.trim(), fecha=$("#fFecha").value;
+  if(!label||!fecha) return aviso("Falta el nombre de la solapa o la fecha.");
+  const camps=parseTSV($("#fTSV").value);
+  if(!camps.length) return aviso("No pude leer ninguna campaña. Verificá que las filas estén separadas por tabulaciones (pegado directo desde la planilla).");
+  const corte={ id:state.editando||("w-"+fecha+"-"+Date.now()), label, fecha,
+    reservas:parseNum($("#fReservas").value), facturacion:parseNum($("#fFact").value),
+    analisis:$("#fAnalisis").value.trim()||null, "campañas":camps };
+  if(state.editando) state.semanas[state.semanas.findIndex(x=>x.id===state.editando)]=corte;
+  else state.semanas.push(corte);
+  ordenar();
+  state.editando=null; state.vista=corte.id;
+  save(); render();
+  toast(camps.length+" campañas cargadas. Publicá para que lo vea el equipo.");
+}
+
+/* ===================== IMPORTAR / EXPORTAR ===================== */
+function download(name,txt,mime){
+  const b=new Blob([txt],{type:mime}); const u=URL.createObjectURL(b);
+  const a=document.createElement("a"); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+$("#btnImp").onclick=()=>{ $("#impFile").value=""; $("#impFile").click(); };
+$("#impFile").onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  let nuevos=null;
+  try{ nuevos=limpiarCortes(JSON.parse(await f.text())); }catch(err){ nuevos=null; }
+  if(!nuevos||!nuevos.length){ toast("Ese archivo no tiene cortes que pueda leer."); return; }
+  let agregados=0, repetidos=0;
+  for(const s of nuevos){
+    if(state.semanas.some(x=>x.id===s.id)) repetidos++;
+    else{ state.semanas.push(s); agregados++; }
+  }
+  if(!agregados){ toast("Nada nuevo: los "+repetidos+" cortes ya estaban cargados."); return; }
+  ordenar();
+  state.vista=state.semanas[state.semanas.length-1].id;
+  save(); render();
+  toast(agregados+" cortes importados"+(repetidos?" ("+repetidos+" ya estaban)":"")+". Publicá para que lo vea el equipo.");
+};
+$("#btnCsv").onclick=()=>{
+  if(!state.semanas.length){ toast("No hay datos"); return; }
+  const sep=";", q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  let out=["Corte","Fecha","Reservas (acum.)","Facturacion (acum.)","Campaña","Conversaciones","Presupuesto","Costo x conv","Alcance","Impresiones","Frecuencia","CTR %"].join(sep)+"\n";
+  for(const s of state.semanas) for(const c of s["campañas"]){
+    out+=[q(s.label),s.fecha,numAR(s.reservas),numAR(s.facturacion),q(c.nombre),numAR(c.conv),numAR(c.presupuesto),
+          c.conv?numAR(Math.round(c.presupuesto/c.conv*100)/100):"",numAR(c.alcance),numAR(c.impresiones),numAR(c.frec),numAR(c.ctr)].join(sep)+"\n";
+  }
+  download("ads-marazul-campañas.csv","﻿"+out,"text/csv;charset=utf-8");
+  toast("CSV descargado. Guardalo fuera del repo.");
+};
+$("#btnJson").onclick=()=>{
+  if(!state.semanas.length){ toast("No hay datos"); return; }
+  if(!confirm("Este respaldo va SIN cifrar (incluye los análisis). Guardalo fuera del repo. ¿Descargar?")) return;
+  download("semilla-ads.json",JSON.stringify({semanas:state.semanas},null,2),"application/json");
+};
+
+/* ===================== PUBLICAR ===================== */
+function trasPublicar(env){
+  published={semanas:JSON.parse(JSON.stringify(state.semanas)),updated:env.updated};
+  envelope=env;
+  clearTimeout(saveTimer);
+  try{ localStorage.removeItem(KEYD); }catch(e){}
+  dirty=false; markState();
+}
+$("#btnPub").onclick=async()=>{
+  const b=$("#btnPub");
+  try{
+    /* no pisar algo publicado después de abrir esta página */
+    try{
+      const rr=await fetch("datos.json?v="+Date.now(),{cache:"no-store"});
+      if(rr.ok){
+        const rem=await rr.json();
+        if(rem.updated && (!published || !published.updated || rem.updated>published.updated)){
+          toast("El tablero se actualizó después de que lo abriste. Recargá la página antes de publicar.");
+          return;
+        }
+      }
+    }catch(e){}
+    const env=await buildEnvelope();
+    const tok=await getToken();
+    if(tok){
+      b.disabled=true; b.textContent="Publicando…";
+      await publishDirect(env,tok);
+      trasPublicar(env);
+      toast("Publicado en GitHub. En un minuto lo ve todo el equipo.");
+    }else{
+      download("datos-ads.json",JSON.stringify(env,null,2),"application/json");
+      trasPublicar(env);
+      toast("datos-ads.json cifrado descargado — subilo con publicar.bat");
+    }
+  }catch(e){
+    toast("No se pudo publicar: "+(e.message||"error"));
+  }
+  b.disabled=false; b.textContent="Publicar cambios";
+};
+$("#btnDrop").onclick=()=>{
+  if(!published){ toast("Todavía no hay una versión publicada"); return; }
+  if(!confirm("¿Descartar tus cambios locales y volver a la versión publicada?")) return;
+  clearTimeout(saveTimer);
+  try{ localStorage.removeItem(KEYD); }catch(e){}
+  location.reload();
+};
+
+/* ---- publicación directa (GitHub API) ----
+   El token se guarda cifrado con tu clave maestra en este navegador.
+   Sin login no se puede leer; sin token se usa la descarga + publicar.bat. */
+async function getToken(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEYT)||"null");
+    if(!d) return null;
+    return TD.decode(await open_(MKEY,d.iv,d.ct));
+  }catch(e){ return null; }
+}
+async function setToken(t){
+  if(!t){ localStorage.removeItem(KEYT); return; }
+  const s=await seal(MKEY,TE.encode(t.trim()));
+  localStorage.setItem(KEYT,JSON.stringify({iv:s.iv,ct:s.ct}));
+}
+async function publishDirect(env,tok){
+  const url="https://api.github.com/repos/"+REPO+"/contents/datos.json";
+  const h={"Authorization":"Bearer "+tok,"Accept":"application/vnd.github+json","Content-Type":"application/json"};
+  let sha=null;
+  const cur=await fetch(url+"?ref=main",{headers:h,cache:"no-store"});
+  if(cur.status===401||cur.status===403) throw new Error("token inválido o sin permiso");
+  if(cur.ok) sha=(await cur.json()).sha;
+  const last=state.semanas[state.semanas.length-1];
+  const body={message:"Campañas actualizadas"+(last?" "+fmtDia(last.fecha):""),content:b64(TE.encode(JSON.stringify(env,null,2))),branch:"main"};
+  if(sha) body.sha=sha;
+  const r=await fetch(url,{method:"PUT",headers:h,body:JSON.stringify(body)});
+  if(r.status===409) throw new Error("alguien publicó en el medio; recargá la página");
+  if(!r.ok) throw new Error("GitHub respondió "+r.status);
+}
+
+/* ===================== EQUIPO ===================== */
+function pintarEquipo(){
+  const box=$("#teamList"); box.innerHTML="";
+  envelope.users.forEach(u=>{
+    const r=document.createElement("div"); r.className="userrow";
+    const n=document.createElement("span"); n.textContent=u.u; r.appendChild(n);
+    if(u.u===CURUSER){ const me=document.createElement("span"); me.className="me"; me.textContent="vos"; r.appendChild(me); }
+    else{
+      const b=document.createElement("button"); b.className="btn sec chico peligro"; b.textContent="Quitar";
+      b.onclick=()=>{
+        if(!confirm("¿Quitar a "+u.u+"? No va a poder entrar más.")) return;
+        envelope.users=envelope.users.filter(x=>x.u!==u.u);
+        dirty=true; markState(); pintarEquipo();
+        toast("Publicá para que el cambio tenga efecto");
+      };
+      r.appendChild(b);
+    }
+    box.appendChild(r);
+  });
+}
+$("#btnTeam").onclick=()=>{ pintarEquipo(); $("#teamModal").classList.add("show"); refreshTokState(); };
+async function refreshTokState(){
+  const t=await getToken();
+  $("#tTokState").textContent = t
+    ? "Activa en este navegador: 'Publicar cambios' sube directo al repo."
+    : "No configurada: 'Publicar cambios' descarga el archivo para subirlo con publicar.bat. Token fine-grained, solo repo ads-marazul, permiso Contents: Read and write.";
+}
+$("#tTokSave").onclick=async()=>{
+  const t=$("#tToken").value.trim();
+  if(!t){ toast("Pegá el token primero"); return; }
+  if(!/^(github_pat_|ghp_)/.test(t)){ toast("Eso no parece un token de GitHub"); return; }
+  await setToken(t); $("#tToken").value="";
+  refreshTokState(); toast("Token guardado, cifrado con tu clave");
+};
+$("#tTokDrop").onclick=async()=>{ await setToken(null); refreshTokState(); toast("Token quitado"); };
+$("#tClose").onclick=()=>$("#teamModal").classList.remove("show");
+$("#teamModal").onclick=e=>{ if(e.target===$("#teamModal")) $("#teamModal").classList.remove("show"); };
+$("#tAdd").onclick=async()=>{
+  const u=norm($("#tUser").value), p=$("#tPass").value;
+  if(!u||!p){ toast("Completá usuario y contraseña"); return; }
+  if(p.length<12){ toast("Mínimo 12 caracteres"); return; }
+  if(envelope.users.some(x=>x.u===u)){ toast("Ese usuario ya existe"); return; }
+  envelope.users.push(await wrapFor(u,p,MASTER));
+  $("#tUser").value=""; $("#tPass").value="";
+  dirty=true; markState(); pintarEquipo();
+  toast("Usuario creado. Publicá para activarlo.");
+};
+$("#tChange").onclick=async()=>{
+  const p=$("#tNewPass").value;
+  if(p.length<12){ toast("Mínimo 12 caracteres"); return; }
+  envelope.users=envelope.users.filter(x=>x.u!==CURUSER);
+  envelope.users.push(await wrapFor(CURUSER,p,MASTER));
+  $("#tNewPass").value="";
+  dirty=true; markState(); pintarEquipo();
+  toast("Contraseña cambiada. Publicá para activarla.");
+};
+
+bootGate();
+})();
+</script>
+</body>
+</html>

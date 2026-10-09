@@ -1,0 +1,10 @@
+# Datos en claro: NUNCA al repo. Lo unico que se publica es datos.json cifrado.
+semilla-ads*
+datos-ads*.json
+*.csv
+*.bak
+
+# Herramientas locales
+.claude/
+Thumbs.db
+.DS_Store
